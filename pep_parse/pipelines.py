@@ -8,14 +8,14 @@ BASE_DIR = Path(__file__).parent.parent
 
 class PepParsePipeline:
     def __init__(self):
-        self.statuses = dict()
+        self.status = dict()
         self.summary = 0
 
     def open_spider(self, spider):
         pass
 
     def process_item(self, item, spider):
-        self.statuses[item['status']] = self.statuses.get(item['status'], 0)+1
+        self.status[item['status']] = self.status.get(item['status'], 0) + 1
         self.summary += 1
         return item
 
