@@ -14,7 +14,7 @@ class PepSpider(scrapy.Spider):
             td_tags = tr_tag.css('td')
             pep_number = td_tags[1].css('::text').get()
             pep_name = td_tags[2].css('::text').get()
-            pep_link = td_tags[1].css('a::attr(href)').get()
+            pep_link = td_tags[1].css('a::attr(href)').get() + '/'
             yield response.follow(
                 pep_link,
                 callback=self.parse_pep,
