@@ -12,22 +12,22 @@ class PepSpider(scrapy.Spider):
         tr_tags = response.css('section[id=numerical-index] tbody tr')
         for tr_tag in tr_tags:
             td_tags = tr_tag.css('td')
-            pep_number = td_tags[1].css('::text').get()
-            pep_name = td_tags[2].css('::text').get()
             pep_link = td_tags[1].css('a::attr(href)').get() + '/'
             yield response.follow(
                 pep_link,
-                callback=self.parse_pep,
-                cb_kwargs={
-                    'number': pep_number,
-                    'name': pep_name,
-                }
+                callback=self.parse_pep
             )
 
-    def parse_pep(self, response, **kwargs):
+    def parse_pep(self, response):
         pep_status = response.css(
             'dt:contains("Status:") + dd abbr::text'
         ).get()
-        kwargs.update({'status': pep_status})
-
-        yield PepParseItem(kwargs)
+        title = response.css('h1.page-title::text').get().split(' – ')
+        number = title[0].replace('PEP', '')
+        pep_name = title[1]
+        data = {
+            'number': number,
+            'name': pep_name,
+            'status': pep_status,
+        }
+        yield PepParseItem(data)
