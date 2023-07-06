@@ -22,7 +22,9 @@ class PepSpider(scrapy.Spider):
         pep_status = response.css(
             'dt:contains("Status:") + dd abbr::text'
         ).get()
-        title = response.css('h1.page-title::text').get().split(' – ')
+        title = response.css(
+            'h1.page-title::text'
+        ).get().split(' – ', maxsplit=1)
         number = title[0].replace('PEP', '')
         pep_name = title[1]
         data = {
